@@ -168,7 +168,17 @@ cp dbt/profiles.yml.example dbt/profiles.yml
 
 Open `dbt/profiles.yml` and fill in your Snowflake credentials. This file is gitignored and never committed.
 
-### 3. Set up Python environment
+### 3. Load environment variables
+
+```bash
+source .env
+```
+
+Run this in your terminal before using any `make` command or running dbt manually. It exports your Snowflake credentials into the shell session.
+
+> **Tip:** Add it to your shell startup (`~/.zshrc`) or re-run it each time you open a new terminal in this project.
+
+### 4. Set up Python environment
 
 ```bash
 # Create virtual environment with Python 3.11
@@ -179,7 +189,7 @@ source .venv/bin/activate   # Mac/Linux
 make install
 ```
 
-### 4. Place Olist CSV files
+### 5. Place Olist CSV files
 
 Download the dataset from [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and place the CSV files inside the `kaggle-data/` folder in the project root:
 
@@ -198,14 +208,17 @@ ecommerce-analytics-pipeline/      ← project root
 
 > The CSV files (~120 MB total) are included in the repository so you can clone and run the pipeline immediately without downloading from Kaggle.
 
-### 5. Load data into Snowflake
+### 6. Load data into Snowflake
 
 ```bash
 make ingest
 ```
 
+The script will **automatically create the database** (`ECOMMERCE_DB`) and the `RAW` schema if they do not exist yet — no manual Snowflake setup required.
+
 Expected output:
 ```
+Database 'ECOMMERCE_DB' ready.
 Schema 'RAW' ready.
 Loading olist_orders_dataset.csv      → RAW.ORDERS      ... done (99,441 rows)
 Loading olist_order_items_dataset.csv → RAW.ORDER_ITEMS ... done (112,650 rows)
@@ -215,7 +228,7 @@ Loading olist_order_reviews_dataset.csv → RAW.REVIEWS   ... done (99,224 rows)
 All tables loaded successfully.
 ```
 
-### 6. Run the dbt pipeline
+### 7. Run the dbt pipeline
 
 ```bash
 make dbt-deps      # Install dbt packages (dbt_utils, dbt_expectations)
@@ -225,7 +238,11 @@ make dbt-test      # Run 51 data quality tests
 make dbt-snapshot  # Create SCD Type 2 snapshot of orders
 ```
 
-All commands run sequentially with `make all`.
+Or run everything in one command:
+
+```bash
+make all
+```
 
 ---
 

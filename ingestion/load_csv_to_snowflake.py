@@ -24,13 +24,19 @@ TABLES = {
 
 
 def get_connection():
+    # Connect without a database so we can create it if it doesn't exist yet
     return snowflake.connector.connect(
         account=SNOWFLAKE_ACCOUNT,
         user=SNOWFLAKE_USER,
         password=SNOWFLAKE_PASSWORD,
-        database=SNOWFLAKE_DATABASE,
         warehouse=SNOWFLAKE_WAREHOUSE,
     )
+
+
+def ensure_database(cur):
+    cur.execute(f"CREATE DATABASE IF NOT EXISTS {SNOWFLAKE_DATABASE}")
+    cur.execute(f"USE DATABASE {SNOWFLAKE_DATABASE}")
+    print(f"Database '{SNOWFLAKE_DATABASE}' ready.")
 
 
 def ensure_schema(cur, schema: str):
@@ -44,13 +50,12 @@ def load_table(conn, cur, table_name: str, csv_path: str):
     df = pd.read_csv(csv_path)
     df.columns = [c.upper() for c in df.columns]
 
-    cur.execute(f"DROP TABLE IF EXISTS RAW.{table_name}")
-
     success, nchunks, nrows, _ = write_pandas(
         conn,
         df,
         table_name=table_name,
         schema="RAW",
+        database=SNOWFLAKE_DATABASE,
         auto_create_table=True,
         overwrite=True,
     )
@@ -64,8 +69,8 @@ def main():
     conn = get_connection()
     cur  = conn.cursor()
     try:
-        cur.execute(f"USE DATABASE {SNOWFLAKE_DATABASE}")
         cur.execute(f"USE WAREHOUSE {SNOWFLAKE_WAREHOUSE}")
+        ensure_database(cur)
         ensure_schema(cur, "RAW")
 
         for table_name, filename in TABLES.items():

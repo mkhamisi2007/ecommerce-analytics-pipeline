@@ -1,5 +1,11 @@
 .PHONY: install ingest dbt-deps dbt-seed dbt-run dbt-test dbt-snapshot dbt-docs dagster-up metabase-up all
 
+# Load .env so all shell commands in this Makefile have the Snowflake vars
+ifneq (,$(wildcard .env))
+  include .env
+  export
+endif
+
 install:
 	pip install -r ingestion/requirements.txt
 	pip install -e dagster/
