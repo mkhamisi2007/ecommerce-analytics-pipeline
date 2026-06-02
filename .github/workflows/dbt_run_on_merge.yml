@@ -3,6 +3,7 @@ name: dbt Run on Merge to Main
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   dbt-run:
@@ -20,8 +21,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dbt-snowflake
-        run: pip install dbt-snowflake
+      - name: Install dependencies
+        run: pip install dbt-snowflake snowflake-connector-python
 
       - name: Create profiles.yml
         run: |
@@ -36,8 +37,32 @@ jobs:
                 password: ${{ secrets.SNOWFLAKE_PASSWORD }}
                 database: ${{ secrets.SNOWFLAKE_DATABASE }}
                 warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+                role: ACCOUNTADMIN
                 schema: dbt_prod
                 threads: 8
+          EOF
+
+      - name: Setup Snowflake Database
+        run: |
+          python3 - << EOF
+          import snowflake.connector
+          conn = snowflake.connector.connect(
+              account="${{ secrets.SNOWFLAKE_ACCOUNT }}",
+              user="${{ secrets.SNOWFLAKE_USER }}",
+              password="${{ secrets.SNOWFLAKE_PASSWORD }}",
+              role="ACCOUNTADMIN"
+          )
+          cur = conn.cursor()
+          cur.execute("CREATE DATABASE IF NOT EXISTS ECOMMERCE_DB")
+          cur.execute("CREATE SCHEMA IF NOT EXISTS ECOMMERCE_DB.RAW")
+          cur.execute("""
+              CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH
+              WAREHOUSE_SIZE = 'XSMALL'
+              AUTO_SUSPEND = 60
+              AUTO_RESUME = TRUE
+          """)
+          print("Snowflake setup complete")
+          conn.close()
           EOF
 
       - name: dbt deps
