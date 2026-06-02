@@ -92,7 +92,7 @@ A production-grade, end-to-end data pipeline built on the [Brazilian E-Commerce 
 
 ```
 ecommerce-analytics-pipeline/
-├── kaggle-data/                     # CSV source files (gitignored — ~120 MB)
+├── kaggle-data/                     # CSV source files (~120 MB, included in repo)
 │   ├── olist_orders_dataset.csv
 │   ├── olist_order_items_dataset.csv
 │   ├── olist_customers_dataset.csv
@@ -197,7 +197,7 @@ ecommerce-analytics-pipeline/      ← project root
 └── ...
 ```
 
-> **Note:** `kaggle-data/` is in `.gitignore` because the files total ~120 MB. They are never committed to the repository.
+> The CSV files (~120 MB total) are included in the repository so you can clone and run the pipeline immediately without downloading from Kaggle.
 
 ### 5. Load data into Snowflake
 
