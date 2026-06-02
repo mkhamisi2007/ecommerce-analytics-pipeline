@@ -92,6 +92,12 @@ A production-grade, end-to-end data pipeline built on the [Brazilian E-Commerce 
 
 ```
 ecommerce-analytics-pipeline/
+├── kaggle-data/                     # CSV source files (gitignored — ~120 MB)
+│   ├── olist_orders_dataset.csv
+│   ├── olist_order_items_dataset.csv
+│   ├── olist_customers_dataset.csv
+│   ├── olist_products_dataset.csv
+│   └── olist_order_reviews_dataset.csv
 ├── .github/
 │   └── workflows/
 │       ├── dbt_test_on_pr.yml       # Run dbt tests on every PR
@@ -176,18 +182,22 @@ make install
 
 ### 4. Place Olist CSV files
 
-Put the 5 Kaggle CSV files in a `kaggle-data/` folder **one level above** the project root:
+Download the dataset from [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and place the CSV files inside the `kaggle-data/` folder in the project root:
 
 ```
-project/
-├── kaggle-data/
+ecommerce-analytics-pipeline/      ← project root
+├── kaggle-data/                    ← put CSV files here
 │   ├── olist_orders_dataset.csv
 │   ├── olist_order_items_dataset.csv
 │   ├── olist_customers_dataset.csv
 │   ├── olist_products_dataset.csv
 │   └── olist_order_reviews_dataset.csv
-└── ecommerce-analytics-pipeline/   ← you are here
+├── ingestion/
+├── dbt/
+└── ...
 ```
+
+> **Note:** `kaggle-data/` is in `.gitignore` because the files total ~120 MB. They are never committed to the repository.
 
 ### 5. Load data into Snowflake
 

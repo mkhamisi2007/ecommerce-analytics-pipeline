@@ -12,7 +12,7 @@ SNOWFLAKE_PASSWORD  = os.environ["SNOWFLAKE_PASSWORD"]
 SNOWFLAKE_DATABASE  = os.environ["SNOWFLAKE_DATABASE"]
 SNOWFLAKE_WAREHOUSE = os.environ["SNOWFLAKE_WAREHOUSE"]
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "kaggle-data")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "kaggle-data")
 
 TABLES = {
     "ORDERS":      "olist_orders_dataset.csv",
