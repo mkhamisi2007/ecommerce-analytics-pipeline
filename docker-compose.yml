@@ -1,0 +1,69 @@
+networks:
+  pipeline-network:
+    driver: bridge
+
+volumes:
+  dagster-storage:
+  metabase-data:
+
+x-dagster-env: &dagster-env
+  DAGSTER_HOME: /opt/dagster/dagster_home
+  SNOWFLAKE_ACCOUNT:   ${SNOWFLAKE_ACCOUNT}
+  SNOWFLAKE_USER:      ${SNOWFLAKE_USER}
+  SNOWFLAKE_PASSWORD:  ${SNOWFLAKE_PASSWORD}
+  SNOWFLAKE_DATABASE:  ${SNOWFLAKE_DATABASE}
+  SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
+
+services:
+
+  dagster-webserver:
+    image: python:3.11-slim
+    container_name: dagster-webserver
+    working_dir: /app
+    command: >
+      bash -c "pip install -r ingestion/requirements.txt -e dagster/[dev] dagster-webserver dagster-dbt dbt-snowflake --quiet &&
+               dagster-webserver -h 0.0.0.0 -p 3000 -w dagster/workspace.yaml"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - dagster-storage:/opt/dagster/dagster_home
+      - ~/.dbt:/root/.dbt:ro
+    environment:
+      <<: *dagster-env
+    networks:
+      - pipeline-network
+    restart: unless-stopped
+
+  dagster-daemon:
+    image: python:3.11-slim
+    container_name: dagster-daemon
+    working_dir: /app
+    command: >
+      bash -c "pip install -r ingestion/requirements.txt -e dagster/[dev] dagster-webserver dagster-dbt dbt-snowflake --quiet &&
+               dagster-daemon run -w dagster/workspace.yaml"
+    volumes:
+      - .:/app
+      - dagster-storage:/opt/dagster/dagster_home
+      - ~/.dbt:/root/.dbt:ro
+    environment:
+      <<: *dagster-env
+    depends_on:
+      - dagster-webserver
+    networks:
+      - pipeline-network
+    restart: unless-stopped
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3001:3000"
+    volumes:
+      - metabase-data:/metabase-data
+    environment:
+      MB_DB_TYPE: h2
+      MB_DB_FILE: /metabase-data/metabase.db
+    networks:
+      - pipeline-network
+    restart: unless-stopped

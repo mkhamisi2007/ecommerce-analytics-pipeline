@@ -1,0 +1,22 @@
+.env
+*.pyc
+__pycache__/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+dbt/profiles.yml
+
+# Dagster
+dagster/dagster_home/
+*.db
+
+# Metabase
+metabase-data/

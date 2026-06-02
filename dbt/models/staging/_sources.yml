@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+  - name: raw
+    database: ECOMMERCE_DB
+    schema: raw
+    description: "Raw tables loaded from Olist e-commerce CSV files"
+    tables:
+      - name: orders
+        description: "All customer orders with status and delivery timestamps"
+        columns:
+          - name: ORDER_ID
+            description: "Unique order identifier"
+            data_tests:
+              - not_null
+              - unique
+          - name: CUSTOMER_ID
+            data_tests: [not_null]
+          - name: ORDER_STATUS
+            data_tests:
+              - not_null
+              - accepted_values:
+                  values: ["delivered", "shipped", "canceled", "processing",
+                           "invoiced", "unavailable", "approved", "created"]
+
+      - name: order_items
+        description: "Line items within each order including price and freight"
+        columns:
+          - name: ORDER_ID
+            data_tests: [not_null]
+          - name: PRODUCT_ID
+            data_tests: [not_null]
+
+      - name: customers
+        description: "Customer location data"
+        columns:
+          - name: CUSTOMER_ID
+            data_tests:
+              - not_null
+              - unique
+
+      - name: products
+        description: "Product catalog with dimensions and category"
+        columns:
+          - name: PRODUCT_ID
+            data_tests:
+              - not_null
+              - unique
+
+      - name: reviews
+        description: "Customer reviews and scores per order"
+        columns:
+          - name: REVIEW_ID
+            data_tests:
+              - not_null
+          - name: ORDER_ID
+            data_tests: [not_null]

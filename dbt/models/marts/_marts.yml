@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: mart_sales
+    description: "Monthly sales summary with revenue, order counts, delivery rate, and customer counts"
+    columns:
+      - name: sales_id
+        description: "Surrogate key generated from month"
+        data_tests: [not_null, unique]
+      - name: month
+        data_tests: [not_null]
+      - name: total_revenue
+        data_tests: [not_null]
+      - name: total_orders
+        data_tests: [not_null]
+      - name: on_time_delivery_rate
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 1
+      - name: average_order_value
+        data_tests: [not_null]
+
+  - name: mart_products
+    description: "Per-product performance metrics including revenue tier classification"
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: total_revenue
+        data_tests: [not_null]
+      - name: avg_review_score
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 5
+      - name: performance_tier
+        data_tests:
+          - accepted_values:
+              values: ["high", "medium", "low"]

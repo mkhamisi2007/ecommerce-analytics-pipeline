@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: int_orders_with_customers
+    description: "Orders joined with their line-item totals and customer location; includes delivery lateness flag"
+    columns:
+      - name: order_id
+        data_tests: [not_null, unique]
+      - name: order_total
+        data_tests: [not_null]
+      - name: is_late
+        description: "NULL for orders not yet delivered; true/false for delivered orders"
+
+  - name: int_product_performance
+    description: "Per-product aggregation of revenue, units sold, review scores, and return rate"
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: total_revenue
+        data_tests: [not_null]
