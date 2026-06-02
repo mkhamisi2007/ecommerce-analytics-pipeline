@@ -25,8 +25,7 @@ jobs:
 
       - name: Create profiles.yml
         run: |
-          mkdir -p ~/.dbt
-          cat > ~/.dbt/profiles.yml << EOF
+          cat > profiles.yml << EOF
           ecommerce_analytics:
             target: prod
             outputs:
@@ -42,19 +41,19 @@ jobs:
           EOF
 
       - name: dbt deps
-        run: dbt deps
+        run: dbt deps --profiles-dir .
 
       - name: dbt seed
-        run: dbt seed
+        run: dbt seed --profiles-dir .
 
       - name: dbt run
-        run: dbt run
+        run: dbt run --profiles-dir .
 
       - name: dbt test
-        run: dbt test
+        run: dbt test --profiles-dir .
 
       - name: dbt snapshot
-        run: dbt snapshot
+        run: dbt snapshot --profiles-dir .
 
       - name: Notify Slack on failure
         if: failure()

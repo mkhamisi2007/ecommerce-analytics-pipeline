@@ -1,4 +1,5 @@
 .env
+dbt/profiles.yml
 *.pyc
 __pycache__/
 .venv/

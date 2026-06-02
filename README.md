@@ -163,11 +163,10 @@ SNOWFLAKE_WAREHOUSE=COMPUTE_WH
 ### 2. Create dbt profiles.yml
 
 ```bash
-mkdir -p ~/.dbt
-cp dbt/profiles.yml.example ~/.dbt/profiles.yml
+cp dbt/profiles.yml.example dbt/profiles.yml
 ```
 
-Open `~/.dbt/profiles.yml` and fill in your credentials (same values as `.env`).
+Open `dbt/profiles.yml` and fill in your Snowflake credentials. This file is gitignored and never committed.
 
 ### 3. Set up Python environment
 

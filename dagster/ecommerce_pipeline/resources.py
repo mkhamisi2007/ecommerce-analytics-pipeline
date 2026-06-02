@@ -6,6 +6,6 @@ DBT_PROJECT_DIR = Path(__file__).parent.parent.parent / "dbt"
 
 dbt_resource = DbtCliResource(
     project_dir=str(DBT_PROJECT_DIR),
-    profiles_dir=str(Path.home() / ".dbt"),
+    profiles_dir=str(DBT_PROJECT_DIR),
     target="dev",
 )

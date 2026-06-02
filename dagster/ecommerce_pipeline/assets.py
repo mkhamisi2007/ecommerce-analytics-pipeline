@@ -59,7 +59,10 @@ def dbt_snapshot(context: AssetExecutionContext):
 
 
 def _run_dbt(context: AssetExecutionContext, args: list[str]):
-    cmd = ["dbt"] + args + ["--project-dir", str(DBT_PROJECT_DIR)]
+    cmd = ["dbt"] + args + [
+        "--project-dir", str(DBT_PROJECT_DIR),
+        "--profiles-dir", str(DBT_PROJECT_DIR),
+    ]
     context.log.info(f"Running: {' '.join(cmd)}")
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=str(DBT_PROJECT_DIR))
     context.log.info(result.stdout)
