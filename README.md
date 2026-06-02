@@ -182,7 +182,7 @@ Run this in your terminal before using any `make` command or running dbt manuall
 
 ```bash
 # Create virtual environment with Python 3.11
-python3.11 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate   # Mac/Linux
 
 # Install all dependencies
@@ -373,6 +373,8 @@ Open **`http://localhost:3001`** and complete the setup wizard:
 
 5. After connecting: **Browse → Databases → Ecommerce Pipeline → DBT_DEV_MARTS**
 6. Click any table → **"Visualize"** to build charts instantly
+
+<img width="638" height="443" alt="image" src="https://github.com/user-attachments/assets/c50e2a02-dc87-4f15-9519-70665b31c712" />
 
 Suggested dashboards to build:
 - **Monthly Revenue Trend** — line chart on `MART_SALES.total_revenue` by `month`
