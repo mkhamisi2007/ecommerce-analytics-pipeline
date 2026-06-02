@@ -388,6 +388,7 @@ Suggested dashboards to build:
 ```bash
 make dbt-docs
 ```
+<img width="1287" height="590" alt="image" src="https://github.com/user-attachments/assets/c648e70f-4cf5-4502-a39b-95caa819726c" />
 
 Open **`http://localhost:8080`** to see:
 - Full DAG lineage graph (sources → staging → intermediate → marts)
@@ -403,6 +404,8 @@ make dagster-up
 ```
 
 Open **`http://localhost:3000`**
+
+<img width="1006" height="453" alt="image" src="https://github.com/user-attachments/assets/7f6db775-7fbd-4233-aa2f-b53d9d961326" />
 
 ### Asset Graph
 
