@@ -144,7 +144,7 @@ ecommerce-analytics-pipeline/
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ecommerce-analytics-pipeline.git
+git clone https://github.com/mkhamisi2007/ecommerce-analytics-pipeline.git
 cd ecommerce-analytics-pipeline
 
 # Copy and fill in your Snowflake credentials
