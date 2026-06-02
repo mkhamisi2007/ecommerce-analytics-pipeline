@@ -536,8 +536,4 @@ ORDER BY dbt_valid_from;
 | dbt docs | `http://localhost:8080` | Data lineage + documentation |
 | Snowflake | `https://zi32238.eu-west-3.aws.snowflakecomputing.com` | Direct SQL access |
 
----
 
-## License
-
-MIT
