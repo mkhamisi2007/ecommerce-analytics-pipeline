@@ -182,7 +182,7 @@ Run this in your terminal before using any `make` command or running dbt manuall
 
 ```bash
 # Create virtual environment with Python 3.11
-python -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate   # Mac/Linux
 
 # Install all dependencies
